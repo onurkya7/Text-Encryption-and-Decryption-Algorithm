@@ -2,60 +2,33 @@ import random
 
 chars = "!%+=)?(/&*_-><.;#[}:,é$]{'£€@"
 chars2 = "5930872416"
-
-sayi = []
-for i in chars2:
-    for j in chars2:
-        sayi.append(str(chars2.index(i)) + str(chars2.index(j)))
-
 space = "~½|`"
-
 b = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ"
 k = "abcçdefgğhıijklmnoöprsştuüvyz"
 
-giris = input("Şifrelenecek metni giriniz: \n")
+sayi = [str(chars2.index(i)) + str(chars2.index(j)) for i in chars2 for j in chars2]
+
+def encrypt_char(char, index):
+    if char in k:
+        m = chars[(k.index(char) + depo.get(char, 0)) % 29]
+        sayac = sayi[depo.get(char, 0)]
+        return [str(chars2[int(q)]) + random.choice(chars) for q in str(sayac)] + [m, random.choice(chars2)]
+    elif char == " ":
+        return [random.choice(space) + random.choice(chars2)]
+    elif char in b:
+        buyuk = k[b.index(char) - 5]
+        return [buyuk, random.choice(chars2)]
+    elif char in chars:
+        ozel = b[chars.index(char) + 3]
+        return [ozel, random.choice(chars2)]
+    return []
+
+giris = input("Enter the text to be encrypted:\n")
 dizi = []
-depo = []
+depo = {}
 
-for i in giris:
-    if(i in k):
-        for j in k:
-            if (i == j):
-                if (i in depo):
-                    sayac = sayi[depo.count(i)]
-                    m = chars[(k.index(j) + depo.count(i)) % 29]
-                    for q in str(sayac):
-                       dizi.append(str(chars2[int(q)]))
-                       dizi.append(random.choice(chars))
-                    dizi.append(m)
-                    dizi.append(random.choice(chars2))
-                    depo.append(i)
-                else:
-                    m = chars[k.index(j)]
-                    dizi.append(str(5))
-                    dizi.append(random.choice(chars))
-                    dizi.append(str(5))
-                    dizi.append(random.choice(chars))
-                    dizi.append(m)
-                    dizi.append(random.choice(chars2))
-                    depo.append(i)
-    elif(i == " "):
-        bosluk = random.choice(space) + random.choice(chars2)
-        dizi.append(bosluk)
-
-    elif(i in b):
-        for h in b:
-            if(i == h):
-                buyuk = k[b.index(i) - 5]
-                dizi.append(buyuk)
-                dizi.append(random.choice(chars2))
-                
-    elif(i in chars):
-        for h in chars:
-            if(i == h):
-                ozel = b[chars.index(i) + 3]
-                dizi.append(ozel)
-                dizi.append(random.choice(chars2))
-
+for char in giris:
+    dizi.extend(encrypt_char(char, giris.count(char)))
+    depo[char] = depo.get(char, 0) + 1
 
 print("\n" + ''.join(dizi))
